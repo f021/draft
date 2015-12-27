@@ -1,21 +1,23 @@
-console.log('hello world');
-
-const makeBtn = (btn = "") => {
-    for(let i = 9; i >= 0; i--) {
-      btn += `<button>${i}</button>\n`
-    }
-    console.log(btn);
-    return btn;
-}
-
+const $ = elm => document.querySelector(elm);
 document.body.innerHTML = `
-<form>
-  <input type="text">
-  ${(btn => {
-    for(let i = 9; i >= 0; i--) {
-      btn += (!(i % 3) ? '</br>' : '') + `<button>${i}</button>`;
-    };
-    return btn;
-  })("")}
-</form>
-`
+<form name='calc'>
+  <button type='button'>c</button>
+  <input type='ext' id='screen' readonly>
+  ${((keys = '789+456-123/0.=*') =>
+    keys.split('')
+      .map((i, n) => (!(n % 4) ? '<br>' : '') + `<button type='button'>${i}</button>`)
+      .join('\n')
+    )()}
+</form>`;
+
+document.forms.calc.addEventListener('click', e => {
+  let key = e.target.textContent;
+  if (key === 'c') {
+    $('#screen').value = '';
+  } else if (key === '=') {
+    $('#screen').value = eval($('#screen').value);
+  } else {
+    $('#screen').value += e.target.textContent; 
+  }
+})
+
