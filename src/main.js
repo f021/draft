@@ -169,32 +169,27 @@ const db = [
   }
 ];
 
-const rand = n => Math.floor(Math.random()*n);
-
-const getAuthor = _ => db[rand(db.length)];
-
-const getQuote = ({author, title, quotes } = getAuthor()) => ({
-  author, title, quotes: quotes[rand(quotes.length)]
-});
-
-const render = ({author, title, quotes} = getQuote()) => `
+const rand = arr => Math.floor(Math.random() * arr.length);
+const $ = str => document.querySelector(str);
+const getQuote = ({author} = db[rand(db)]) =>
+  db.filter(e => e.author === author)[0];
+const render = ({author, title, quotes} = getQuote()) => {
+  $('#quote').innerHTML = `
   <blockquotes>
-    <p>${quotes}</p>
+    <p>${quotes[rand(quotes)]}</p>
     <cite>
-      ${`--<span class='author'>${author || ''}</span>`}
+      ${`--<span id='author'>${author || ''}</span>`}
       ${title ? `, <span id='title'>${title}</span>` : ''}</cite>
   </blockquote>`;
+  $('#same').classList.toggle('hidden', quotes.length == 1);
+};
 
 document.forms.quote.addEventListener('click', e => {
-  let quote;
-  if (e.target.name === 'next') {
-    quote = getQuote();
-  } else if (e.target.name === 'same') {
-    quote = getQuote(document.querySelector('.author').textContent);
-    console.log(document.querySelector('.author').textContent);
-    console.log(quote);
-  }
-  document.querySelector('#content').innerHTML = render(quote);
+  if (e.target.type === 'button') {
+    render((e.target.id === 'same')
+      ? getQuote({author: $('#author').textContent})
+      : undefined);
+  };
 });
 
-module.exports = { render, getQuote, render };
+module.exports = { render, $ };
