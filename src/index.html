@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div id="wrap">
-      <div id="quote">
-      </div>
-      <form name="quote">
-          <button type="button" id="next">random author</button>
-          <button type="button" id="same" class="hidden">same author</button>
-      </form>
-    </div>
+  <div id="wrap">
+    <blockquote>
+      <p id="quote"></p>
+      <div id="detail"><p id="author"></p><p id="title"></p></div>
+    </blockquote>
+    <form name="quote">
+      <button type="button" id="next">random author</button>
+      <button type="button" id="same" class="hidden">same author</button>
+    </form>
+  </div>
     <script src="bundle.js"></script>
   </body>
 </html>
