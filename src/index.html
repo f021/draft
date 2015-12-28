@@ -7,16 +7,23 @@
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-  <div id="wrap">
-    <blockquote>
-      <p id="quote"></p>
-      <div id="detail"><p id="author"></p><p id="title"></p></div>
-    </blockquote>
-    <form name="quote">
-      <button type="button" id="next">random author</button>
-      <button type="button" id="same" class="hidden">same author</button>
-    </form>
-  </div>
-    <script src="bundle.js"></script>
+    <main>
+      <div id="pomodoro">
+       <p id="time" data-time="25">25:00</p>
+       <form name="ui">
+        <label><input type="radio" name="player" value="start">start</label>
+        <label><input type="radio" name="player" value="resume">resume</label>
+        <label><input type="radio" name="player" value="pause" checked>pause</label>
+        <button type="button" name="start">start</button>
+        <button type="button" name="resume" class="hidden">resume</button>
+        <button type="button" name="pause" class="hidden">pause</button>
+        <br />
+        <button type="button" onclick="dec()">-</button>
+        <input type="text" value="25">
+        <button type="button" onclick="inc()">+</button>
+      </form>
+      </div>
+    </main>
+    <script src='bundle.js'></script>
   </body>
 </html>
