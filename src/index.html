@@ -3,24 +3,20 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>es6-webpack-babel-boilerplate</title>
+    <title>zipline: pomodoro</title>
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
     <main>
       <div id="pomodoro">
-       <p id="time" data-time="25">25:00</p>
+       <p id="time" data-time="1500">25:00</p>
        <form name="ui">
-        <label><input type="radio" name="player" value="start">start</label>
-        <label><input type="radio" name="player" value="resume">resume</label>
-        <label><input type="radio" name="player" value="pause" checked>pause</label>
-        <button type="button" name="start">start</button>
-        <button type="button" name="resume" class="hidden">resume</button>
-        <button type="button" name="pause" class="hidden">pause</button>
+        <label><input id="start" type="radio" name="player"> start/resume</label>
+        <label><input id="pause" type="radio" name="player" checked> pause</label>
         <br />
-        <button type="button" onclick="dec()">-</button>
-        <input type="text" value="25">
-        <button type="button" onclick="inc()">+</button>
+        <button type="button" onclick="main.inc(-60)">-</button>
+        <button type="button" onclick="main.inc(60)">+</button>
+        <button type="button" onclick="main.reset()">reset</button>
       </form>
       </div>
     </main>
