@@ -1,15 +1,17 @@
-const user = ["starladder1","freecodecamp", "medrybw", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff"];
-const data = [];
-const get = str => {
+const users = ["starladder1","freecodecamp", "medrybw", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff"];
+const url = 'https://api.twitch.tv/kraken/';
+const get = (url, fn) => {
+  console.log(url, fn)
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://api.twitch.tv/kraken/users/'+ str, true);
+  xhr.open('GET', url, true);
   xhr.send();
-  xhr.onload = _ => {
-    data.push(JSON.parse(xhr.responseText));
-    if (data.length === user.length) render();
-  };
+  xhr.onload = _ => fn(JSON.parse(xhr.responseText));
   xhr.onerror = _ => console.log(xhr.status);
 }
+
+users.forEach( user => {get(url + 'streams/' + user, (json) => {
+  console.log(json);
+})});
 
 const render = _ => {
   console.log('aaa');
@@ -25,6 +27,6 @@ const render = _ => {
     </li>`
   }).join('');
 }
-
-user.forEach(e => get(e));
+// get();
+// user.forEach(e => get(e));
 module.exports = {get};
