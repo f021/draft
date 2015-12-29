@@ -3,11 +3,19 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>zipline: weather</title>
+    <title>twitch</title>
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <iframe frameborder="no" onload="main.resize(this)" seamless id="weather"></iframe>
-    <script src='bundle.js'></script>
+    <main>
+      <form name='ui'>
+        <label><input type='radio' name='filter' value="all" checked>all</label>
+        <label><input type='radio' name='filter' value="online">online</label>
+        <label><input type='radio' name='filter' value="offline">offline</label>
+        <input type=text>
+      </form>
+      <ul id="users"></ul>
+    </main>
+    <script src="bundle.js"></script>
   </body>
 </html>
