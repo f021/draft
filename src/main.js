@@ -1,20 +1,14 @@
-const $ = str => document.querySelector(str);
-const time = (elm = $('#time'), attr = "time") => elm.dataset[attr];
-const addZero = n => '0'.repeat(2 - String(n).length) + n;
-const set = n => {
-  if (n >= 0 && n <= 59 * 60) {
-    $('#time').dataset.time = n;
-    $('#time').innerText = `${addZero(Math.floor(time()/60))}:${addZero(time()%60)}`;
-  }
-};
-const inc = n => set(+time() + n);
-const reset = _ => {set (25 * 60); $('#pause').checked = true;};
-const done = _ => {alert('done!'); reset(); };
+const xhr = new XMLHttpRequest();
+const resize = elm => elm.style.height = elm.contentWindow.document.body.scrollHeight + 'px';
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition( position => {
+    xhr.open('GET', `http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&mode=html&APPID=9f428c75cbc93a1937e34d3a970f15f1`, true);
+    xhr.send();
+    xhr.onload = _ => {
+      document.getElementById('weather').srcdoc = xhr.responseText;
+    }
+    xhr.onerror = _ => { console.log(xhr.status) }
+  });
+}
 
-setTimeout(function go() {
-  if ($('#start').checked && time() > 0) inc(-1);
-  if (+time() === 0) done();
-  setTimeout(go, 1000);
-}, 1000);
-
-module.exports = {inc, reset};
+module.exports = {resize}
