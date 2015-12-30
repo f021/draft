@@ -8,19 +8,11 @@ const getJSON = url => {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.send();
-    xhr.onload = _ => {
-      (xhr.status === 200)
-        ? resolve(JSON.parse(xhr.responseText))
-        : reject(xhr.status);
-    };
+    xhr.onload = _ => xhr.status === 200
+      ? resolve(JSON.parse(xhr.responseText))
+      : reject(xhr.status);
     xhr.onerror = _ => reject(xhr.status);
   });
-}
-
-const filter = (users, streams) => {
-  console.log(users, streams);
-  // users => users.filter(user =>
-    // new RegExp('^' + $('#str').value).test(user.name)))
 }
 
 const getList = (str, db = users) => {
@@ -31,32 +23,31 @@ const getList = (str, db = users) => {
 }
 
 const filterByName = user =>
-  new RegExp('^' + $('#str').value).test(getName(user._links.channel));
-
-const getUsr = user => ({
-  user, status: user.stream !== null
-})
+  new RegExp('^' + $('#str').value, 'i').test(getName(user._links.channel));
 
 const start = _ => {
-  getList('streams/').then(users => users.filter(user => filterByName(user)))
-    .then(users => users.map(user => getUsr(user)))
-    .then(users => console.log(users));
+  getList('streams/').then(streams => streams.filter(stream => filterByName(stream)))
+  .then(streams => getList('users/', streams.map(stream => getName(stream._links.channel)))
+    .then(users => render(users, streams.reduce((obj, user) => {
+      obj[getName(user._links.channel)] = (user.stream !== null);
+      return obj;
+    }, {}))))
 }
 
-const render = arr => {
-  document.querySelector('#users').innerHTML = arr.map(user => {
-    return `
-    <li>
-      <h1>
-        <img src='${user.logo}'>
-        <a href='${user._links.self}'>${user.display_name}</a>
-      </h1>
-      <p>${user.bio}</p>
-    </li>`
-  }).join('');
+const filter = bool => bool && $('#on').checked || !bool && $('#off').checked;
+
+const render = (users, status) => {
+  document.querySelector('#users').innerHTML = users.filter(user =>
+    filter(status[user.name])).map(user => `
+      <li>
+        <div class='title'>
+          ${ user.logo ? `<img src='${user.logo || ''}'>` : '<span class="empty"></span>'}
+          <a href='http://www.twitch.tv/${user.name}' target='_blank'>${user.display_name}</a>
+          ${(status[user.name]) ? '<span class="green">&bull;</span>' : '<span class="red">&bull;</span>'}
+        </div>
+      ${user.bio ? `<div class='bio'><p>${user.bio}</p></div>` : ''}
+      </li>`).join('');
 }
 
-['input', 'change'].forEach(e =>
-  document.forms.ui.addEventListener(e, start));
+['input', 'change'].forEach(e => {document.forms.ui.addEventListener(e, start)});
 window.onload = start();
-module.exports = {getName};

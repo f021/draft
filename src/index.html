@@ -7,15 +7,17 @@
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <main>
+    <div id="twitch">
       <form name='ui'>
-        <label><input type='radio' name='filter' value="all" checked>all</label>
-        <label><input type='radio' name='filter' value="online">online</label>
-        <label><input type='radio' name='filter' value="offline">offline</label>
-        <input id='str' type=text>
+        <input id='str' type='text' autofocus>
+        <br />
+        <label><input id="on" type='checkbox' checked> online</label>
+        <label><input id="off" type='checkbox' checked> offline</label>
       </form>
-      <ul id="users"></ul>
-    </main>
+      <div class="list">
+        <ul id="users"></ul>
+      </div>
+    </div>
     <script src="bundle.js"></script>
   </body>
 </html>
