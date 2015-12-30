@@ -8,97 +8,78 @@
 
 body {
   width: 100%;
+  background: black;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #1abc9c;
+  background-color: #f1c40f;
+}
+
+
+#news{
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: .7em;
+  width: 100%;
+}
+
+#news li {
+  background-size: cover;
+  background: center center;
+  flex: 0 0 100%;
+  padding: 5em;
+}
+
+#news a {
+  text-decoration: none;
+}
+
+#title {
+  width: 100%;
+  color: white;
+  background-color: black;
+  padding: 2em 3em;
+  text-align: center;
+  background: url('https://s3.amazonaws.com/freecodecamp/wide-social-banner.png') no-repeat center center;
+}
+
+#title h1 {
+  color: green;
+}
+
+
+#news li a h1 {
+  width: 30%;
+  display: inline-block;
+  font-size: 2em;
+  color: white;
+  background-color: black;
+  padding: .5em;
+  margin-bottom: 2em;
+}
+
+#news li p {
+  width: 40%;
+  background-color: white;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#news li p a {
+  color: #c0392b;
 }
 
 input[type="text"] {
-  font-size: .8em;
-  background-color: #1abc9c;
+  font-size: 1em;
+  background-color: rgb(157, 160, 33);
   border: none;
-  border-bottom: 2px solid #16a085;
+  border-bottom: 4px solid #f39c12;
   color: white;
-}
-
-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-form[name="ui"] {
-  margin: .5em 0 1em 0;
-  padding: .3em 0;
-  text-align: center;
-  background-color: #1abc9c;
-}
-
-ul {
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  font-size: .7em;
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 input:focus {
   outline: none;
-}
-
-label {
-  font-size: .5em;
-  color: white;
-}
-
-input[type="text"] {
-  margin-top: .5em;
-}
-
-.bio {
-  color: #7f8c8d;
-  font-size: .8em;
-  padding: 1em .5em;
-}
-
-li {
-  margin-bottom: .5em;
-  padding: 1em;
-  background-color: #ecf0f1;
-}
-
-.empty {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: white;
-  display: inline-block;
-}
-
-.red {
-  color: #ea6153;
-  font-size: 5em;
-}
-
-.green {
-  color: #2ecc71;
-  font-size: 5em;
-}
-
-#twitch {
-  width: 300px;
-}
-
-#twitch a {
-  flex: 0 0 60%;
-  text-decoration: none;
-  color: #34495e;
-  font-weight: 800;
 }
