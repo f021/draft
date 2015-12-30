@@ -49,17 +49,20 @@ body {
 }
 
 
-#news li a h1 {
-  width: 30%;
-  display: inline-block;
+.headline {
+  width: 80%;
+  /*display: ;*/
   font-size: 2em;
-  color: white;
   background-color: black;
   padding: .5em;
   margin-bottom: 2em;
 }
 
-#news li p {
+.headline a {
+  color: white;
+}
+
+.details {
   width: 40%;
   background-color: white;
   color: black;
@@ -82,4 +85,10 @@ input[type="text"] {
 
 input:focus {
   outline: none;
+}
+
+@media screen and (min-width: 800px) {
+  #news li {
+    flex: 0 0 50%;
+  }
 }
