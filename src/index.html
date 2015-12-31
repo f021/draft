@@ -3,23 +3,20 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>tictactoe</title>
+    <title>Simon Game</title>
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <main>
-      <ul id="board">
-        <li id="a"></li>
-        <li id="b"></li>
-        <li id="c"></li>
-        <li id="d"></li>
-        <li id="e"></li>
-        <li id="f"></li>
-        <li id="h"></li>
-        <li id="i"></li>
-        <li id="j"></li>
+    <main id="simon">
+      <div class="play half" id="green"></div>
+      <div class="play half" id="red"></div>
+      <div class="play half" id="yellow"></div>
+      <div class="play half" id="blue"></div>
+      <div id='ui'>
+        <h1 id='msg'>Simon Game</h1>
+        <p>level: <span id="level">00</span></p>
       </div>
-  </main>
+    </main>
     <script src="bundle.js"></script>
   </body>
 </html>
