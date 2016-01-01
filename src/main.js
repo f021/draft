@@ -1,11 +1,25 @@
 const audioUrls = ["http://markjackson.nl/sounds/E4.mp3", "http://markjackson.nl/sounds/A3.mp3","http://markjackson.nl/sounds/Csharp3.mp3", "http://markjackson.nl/sounds/E3.mp3"]
-const audioNodes = audioUrls.map(e => new Audio(e));
-const playground = ['#blue', '#red', '#green', '#yellow'];
+const audioNodes = audioUrls.map(e => new Audio(e))
+const playground = ['#blue', '#red', '#green', '#yellow']
+let mode = false;
 
-const $ = str => document.querySelector(str)
+const $ = str =>
+  typeof str === 'string'
+    ? document.querySelector(str)
+    : str.target
 
 const getRandomElm = arr =>
-  arr[Math.floor(Math.random()*arr.length)]
+  arr[Math.floor(Math.random() * arr.length)]
+
+const generateSequence = (seed, arr = []) =>
+  () => {
+    console.log('generate:', seed, ':', arr)
+    arr.push(getRandomElm(seed.slice(0, Math.ceil(arr.length / seed.length) + 1)))
+    return arr
+  }
+
+const addZero = n =>
+  '0'.repeat(2 - String(n).length) + n
 
 const shuffle = arr =>
   arr.sort((a, b) =>
@@ -14,74 +28,117 @@ const shuffle = arr =>
 const changeOpacity = (elm, n) =>
   elm.style.opacity = n
 
-const onOff = elm =>
-  elm.classList.toggle('half');
+const onOff = str =>
+  $(str).classList.toggle('half');
 
-const generateSequence = (seed, arr = []) =>
-  () => {
-    arr.push(getRandomElm(seed.slice(0, Math.ceil(arr.length / seed.length) + 1)))
-    return arr
-  }
+const active = str =>
+  $(str).classList.toggle('active');
 
 
-let  b = generateSequence(shuffle(playground));
-for (let i = 0; i < 20; i++) {
-  b();
-}
+// let b = generateSequence(shuffle(playground))
+// for (let i = 0; i < 20; i++) {
+//   b()
+// }
 
-const delay = ms => new Promise (
+const delay = ms => new Promise(
   (resolve, reject) => setTimeout(resolve, ms)
 )
 
-const time = (fn, ms) => new Promise (
-  (resolve, reject) => setTimeout(()=>{
-    console.log(fn);
-    resolve()}, ms)
+// const state = (x, fn1, fn2) => {
+//   let flag = true
+//   console.log('state:', x)
+//   return (n = x) => {
+//     // console.log('state:', x, fn1, fn2)
+//     flag = !flag
+//     flag
+//       ? fn2(n)
+//       : fn1(n)
+//   }
+// }
+
+// const twice = (fn, ms) => new Promise(
+//   (resolve, reject) => {
+//     // console.log('twice: ', fn, ms)
+//     fn()
+//     delay(ms)
+//     .then(() => {
+//       fn()
+//       return delay(ms - (ms / 100) * 20)
+//     })
+//     .then(() => {
+//       resolve()
+//     })
+//   }
+// )
+
+
+const playOn = str => {
+  console.log(str);
+  onOff(str)
+  audioNodes[playground.indexOf(str)].play()
+}
+
+const playOff = str => {
+  onOff(str)
+  audioNodes[playground.indexOf(str)].pause()
+  audioNodes[playground.indexOf(str)].currentTime = .0
+}
+
+const click = (str, ms) => new Promise(
+  (resolve, reject) => {
+    playOn(str)
+    delay(ms)
+    .then(() => {
+      playOff(str)
+      return delay(ms - (ms / 100) * 20)
+    })
+    .then(() =>
+      resolve()
+    )
+  }
 )
 
-time(()=>console.log('aaa'), 1000).then(time(null,1000).then(()=>console.log('bbb')))
+const playSequence = (arr, cb) => {
+  !arr.length
+    ? cb()
+    : click(arr[0], 500)
+      .then(() =>
+      playSequence(arr.slice(1), cb))
+}
 
-const twice = (fn, ms) => new Promise(
+const listen = seq => new Promise(
   (resolve, reject) => {
-    delay(ms).then(() => {
-      fn();
-      delay(ms - (ms/100)*20).then(() => {
-        fn();
-        resolve();
+    console.log('LISTEN: ', seq);
+    $(e).addEventListener('click', _ => {
+      twice(state(e, playOn, playOff), 500)
+      .then(() => {
+        if (seq[0] !== e) {
+          delay(500).then(reject)
+        } else {
+          seq.shift();
+        }
+        if (seq.length === 0) {
+          delay(500).then(resolve)
+        }
       })
     })
   }
 )
 
-twice(function(){console.log('ups')},1000).then(function(){console.log('hehe')})
-
-const timerFn = (arr, fn, cb) => {
-  if (arr.length !== 0) {
-    setTimeout(() => {
-      fn(arr[0]);
-      timerFn(arr.slice(1), fn, cb)
-    }
-    , 1000)
-  } else {
-    cb();
-  }
+const go = turn => {
+  let seq = turn();
+  console.log('GO: ', seq);
+  $('#level').innerText = addZero(seq.length)
+  playSequence(seq, () =>
+    listen(seq.slice())
+    .then(()=>go(turn))
+    .catch(()=>console.log('lose')))
 }
 
-timerFn( b(), e => {
-  onOff($(e));
-  // audioNodes[playground.indexOf(e)].play();
-  setTimeout(()=>{
-    onOff($(e))
-    // audioNodes[playground.indexOf(e)].pause();
-    // audioNodes[playground.indexOf(e)].currentTime = .0;
-  }
-    , 800)}, ()=> console.log('done'))
 
-
-playground.forEach(e => {
-  $(e).addEventListener('mouseover', e => onOff(e.target))
-  $(e).addEventListener('mouseout', e => onOff(e.target))
-  $(e).addEventListener('click', e => onOff(e.target))
+$('#start').addEventListener('click', _ => {
+  $('#level').dataset['level'] = 0;
+  go(generateSequence(shuffle(playground)))
 })
 
-module.exports = {delay}
+module.exports = {click}

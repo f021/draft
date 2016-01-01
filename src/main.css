@@ -1,6 +1,8 @@
+
 * {
   margin: 0;
-  padding: 0
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -32,37 +34,37 @@ main {
 }
 
 #green {
+  border-top-left-radius: 50%;
   background-color: rgb(46, 204, 113);
 }
 
 #red {
+  border-top-right-radius: 50%;
   background-color: rgb(231, 76, 60);
 }
 
 #yellow {
+  border-bottom-left-radius: 50%;
   background-color: rgb(241, 196, 15);
 }
 
 #blue {
+  border-bottom-right-radius: 50%;
   background-color: rgb(52, 152, 200);
 }
-
-/*.full {
-  opacity: 1;
-}*/
 
 .half {
   opacity: .5 !important;
 }
 
-.ups {
-  opacity: 1;
+.active {
+  border: 10px solid white;
+  /*opacity: .5;*/
 }
 
 .play {
-  border-radius: 25%;
   opacity: 1;
-  /*transition: all .5s ease-out .5s;*/
+  /*transition: all .1s ease-out .5s;*/
 }
 
 .play:hover {
@@ -75,7 +77,7 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: black;
-  border-radius: 50%;
+  border-radius: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,6 +88,27 @@ main {
   font-size: 1em;
 }
 
+#level {
+  background-color: grey;
+  padding: .5em;
+  display: inline-block;
+}
+
+#start {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-color: green;
+  border-radius: 50%;
+  /*border: 3px solid yellow;*/
+  color: green;
+}
+
 #ui p {
+  margin-top: 2em;
   font-size: .6em;
+}
+
+button:focus {
+  outline: none;
 }
