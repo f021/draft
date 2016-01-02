@@ -1,3 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=VT323);
+@import url(https://fonts.googleapis.com/css?family=Indie+Flower);
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+@import url(https://fonts.googleapis.com/css?family=Codystar);
 
 * {
   margin: 0;
@@ -53,7 +57,11 @@ main {
   background-color: rgb(52, 152, 200);
 }
 
-.half {
+.text-right {
+  text-align: right !important;
+}
+
+.off {
   opacity: .5 !important;
 }
 
@@ -71,6 +79,10 @@ main {
   cursor: pointer;
 }
 
+.can-click:hover {
+  cursor: pointer;
+}
+
 #ui {
   position: absolute;
   top: 50%;
@@ -79,29 +91,50 @@ main {
   background-color: black;
   border-radius: 30%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  cursor: default;
 }
 
 #ui h1 {
-  font-size: 1em;
+  font-size: .6em;
+  padding: 0;
+  margin-top: 2em;
+  opacity: .5;
+  font-family: 'Press Start 2P', cursive;
 }
 
 #level {
-  background-color: grey;
-  padding: .5em;
-  display: inline-block;
+  flex: 0 0 40%;
+  width: 80%;
+  display: block;
+  /*text-transform: uppercase;*/
+  /*display: inline-block;*/
+  /*background-color: green;*/
+  line-height: 1.2em;
+  font-size: 3em;
+  color: white;
+  font-family: 'VT323' !important;
+  /*font-family: 'Indie Flower', cursive;*/
+  /*font-family: 'Press Start 2P', cursive;*/
+  /*font-family: 'Codystar', cursive;*/
+  opacity: .8;
+  text-align: center;
 }
 
 #start {
-  width: 30px;
-  height: 30px;
+  margin-bottom: 1em;
+  width: 25px;
+  height: 25px;
   display: inline-block;
-  background-color: green;
+  background-color: black;
+  color: white;
   border-radius: 50%;
-  /*border: 3px solid yellow;*/
-  color: green;
+  border: 2px solid white;
+  /*border: none;*/
+  /*color: green;*/
+  opacity: .6
 }
 
 #ui p {
