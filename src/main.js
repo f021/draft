@@ -52,6 +52,10 @@ const setVisibilityGrid = visibility => ({
   state: visibility
 })
 
+
+const distance = ({x, y}) => Math.sqrt(x*x + y* y);
+const manhattan = ({x, y}) => Math.abs(x) + Math.abs(y);
+
 const add = (...args) =>
   args.reduce((acc, vector) => ({
     x: acc.x + vector.x,
@@ -84,20 +88,20 @@ const toXY = (i, w) => ({
   y: Math.floor(i/w)
 });
 
-
-const torMap = (x, r) =>  x < 0 ? (x + r) % r : x % r;
-
-const toX = ({ x, y }) => ({ w, h }, tor) => {
-  if (tor) {
-      return torMap(x, w) + torMap(y, h) * w ;
-  } else {
+const toX = ({ x, y }) => ({ w, h }) => {
   let n = x + y * w;
     if ((x >= 0 && x < w) && (y >= 0 && y < h) && (n < w * h)) {
       return n;
     }
   }
-}
 
+const translateTor = ({ x, y}, { w, h }) => {
+  const tor = (x, r) => x < 0 ? (x + r) % r : x % r;
+  return {
+    x: tor(x, w),
+    y: tor(y, h)
+  }
+}
 
 // });
 function render() {
@@ -114,17 +118,25 @@ b += "</div>"
 document.body.innerHTML = b;
 };
 
-const distance = ({x, y}) => Math.sqrt(x*x + y* y);
-const manhattan = ({x, y}) => Math.abs(x) + Math.abs(y);
+
 
 render();
 document.addEventListener('mouseover', (e) => {
   render();
   let a = 0;
   let acc =0;
-  for(let i of domain(10)) {
-    let elm = toX(add(i, toXY(Number(e.target.id), 20) ))
-    ({w:20, h:400/20}, 'tor' );
+  for(let i of domain(15)) {
+    let elm = add(i, toXY(Number(e.target.id), 20));
+    elm = (
+      toX(
+        translateTor(
+          elm, {w: 20, h: 400/20}
+        )
+      )
+      (
+        {w: 20, h: 400/20}
+      )
+    );
     if (typeof elm !== 'undefined') {
     document.getElementById(''+ elm)
     .classList.toggle('selected');
