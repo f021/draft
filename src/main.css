@@ -6,14 +6,14 @@ body {
     display: flex;
 }
 .box {
-  display: flex;
+  /*display: flex;*/
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 6em;
-  height: 6em;
-  /*margin: .5em;*/
-  border: 1px solid grey;
+  width: 2.5em;
+  height: 2.5em;
+  /*margin: .1em;*/
+  /*border: 1px solid grey;*/
   background-color: rgba(200,200, 200, 1);
 }
 
