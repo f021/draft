@@ -1,18 +1,21 @@
 body {
   font-size: .6em;
+  /*background-color: black;*/
 }
 
 .row {
     display: flex;
 }
 .box {
-  /*display: flex;*/
+  display: flex;
+  color: rgba(0, 140, 130, 1);
+  font-weight: 800;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 2.5em;
-  height: 2.5em;
-  /*margin: .1em;*/
+  width: 5em;
+  height: 5em;
+  margin: .1em;
   /*border: 1px solid grey;*/
   background-color: rgba(200,200, 200, 1);
 }

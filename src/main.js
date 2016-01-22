@@ -7,7 +7,7 @@ const test = [
       ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
         ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
           ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-            ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+            ,0, 0, 0, 1, 0, 0, 0, 1
 ];
 
 const blinker = [
@@ -95,7 +95,7 @@ const toX = ({ x, y }) => ({ w, h }) => {
     }
   }
 
-const translateTor = ({ x, y}, { w, h }) => {
+const translateTor = ({ x, y }, { w, h }) => {
   const tor = (x, r) => x < 0 ? (x + r) % r : x % r;
   return {
     x: tor(x, w),
@@ -106,12 +106,12 @@ const translateTor = ({ x, y}, { w, h }) => {
 // });
 function render() {
 let b = "<div class='container'>";
-for (let i = 0; i < 400; i++) {
-    if ( i % 20 === 0) {
+for (let i = 0; i < test.length; i++) {
+    if ( i % 10 === 0) {
       b += "</div><div class='row'>"
     }
-    b += `<div class='box' id='${i}'>` +
-
+    b += `<div class='box' id='${i}'
+    style='background-color: ${test[i]===0 ? 'lightgrey' : 'grey' }'>` +
     "</div>"
 }
 b += "</div>"
@@ -119,33 +119,54 @@ document.body.innerHTML = b;
 };
 
 
+// const gogo = () => {
+//   field = {
+//     w:10,
+//     h: test.length/10
+//   };
+//   test.map( (cell, index) => {
+//     let alive = 0;
+//     for ( n of domen(1)) {
+//       translateTor(add(n, toXY(index)))
+//     }
+//   });
+// },
+
+// setInterval(gogo, 100)
+
+
+document.addEventListener('mouseover', e => {
+  let a = domain(1);
+  console.log(toX(a.next().value)({w:10, h: test.length/10}))
+  console.log(e.target.id);
+})
 
 render();
-document.addEventListener('mouseover', (e) => {
-  render();
-  let a = 0;
-  let acc =0;
-  for(let i of domain(15)) {
-    let elm = add(i, toXY(Number(e.target.id), 20));
-    elm = (
-      toX(
-        translateTor(
-          elm, {w: 20, h: 400/20}
-        )
-      )
-      (
-        {w: 20, h: 400/20}
-      )
-    );
-    if (typeof elm !== 'undefined') {
-    document.getElementById(''+ elm)
-    .classList.toggle('selected');
-    acc += test[elm];
-    document.getElementById(''+ elm).style.backgroundColor =
-    `rgb(0, ${20 * Math.round(distance(i))}, ${250 / Math.round(distance(i)/5)} )`;
-    // document.getElementById(''+ elm).innerHTML = `<span>${i.x}:${i.y}</span>`;
-  }
-}
-})
+// document.addEventListener('mouseover', (e) => {
+//   render();
+//   let a = 0;
+//   let acc =0;
+//   for(let i of domain(15)) {
+//     let elm = add(i, toXY(Number(e.target.id), 20));
+//     elm = (
+//       toX(
+//         translateTor(
+//           elm, {w: 20, h: 400/20}
+//         )
+//       )
+//       (
+//         {w: 20, h: 400/20}
+//       )
+//     );
+//     if (typeof elm !== 'undefined') {
+//     document.getElementById(''+ elm)
+//     .classList.toggle('selected');
+//     acc += test[elm];
+//     document.getElementById(''+ elm).style.backgroundColor =
+//     `rgb(0, ${20 * Math.round(distance(i))}, ${250 / Math.round(distance(i)/5)} )`;
+//     // document.getElementById(''+ elm).innerHTML = `<span>${i.x}:${i.y}</span>`;
+//   }
+// }
+// })
 
 module.exports = {toXY, toX, setCellState}
