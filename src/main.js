@@ -1,142 +1,74 @@
-const audioUrls = ['http://markjackson.nl/sounds/E4.mp3', 'http://markjackson.nl/sounds/A3.mp3', 'http://markjackson.nl/sounds/Csharp3.mp3', 'http://markjackson.nl/sounds/E3.mp3']
-// const audioNodes = audioUrls.map(e => new Audio(e))
-const msgHello = ` hello, my name is Simon, i'm memory trainer! let's begin...      `.split('')
-const msgLose = ` we need more practice...      `.split('')
-const msgWin = ` you're amazing...      `.split('')
-const seed = ['#blue', '#red', '#green', '#yellow']
-const test = ['#blue', '#blue', '#blue', '#red', '#green', '#red', '#green', '#yellow', '#blue' ,  '#green', '#red', '#green']
-const sayYes = ['Ok', ':)', 'wow', 'easy', 'ninja']
-const sayNo = ['f**k', ':(', 'ups' , 'lol']
-const WIN = 20
-const TIME = 500
+const test = [
+  0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+  0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+  0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+  ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+]
 
-const game = {
-  seq: [],
-  clicks: []
-}
+const add = (...args) =>
+  args.reduce((acc, vector) => ({
+    x: acc.x + vector.x,
+    y: acc.y + vector.y
+  }), { x: 0, y: 0 })
 
-const $ = str => document.querySelector(str)
+const product = (n, v) => ({
+  x: n * v.x,
+  y: n * v.y
+});
 
-const getRandomElm = arr => arr[Math.floor(Math.random() * arr.length)]
-
-const arrForType = (arr, len) =>
-  arr.slice(1).reduce((arr, elm) =>
-    arr.concat(arr[arr.length - 1].slice(-len + 1) + elm)
-  , [addToLeft(arr[0], ' ', len)])
-
-const setMsg = str => $('#level').innerText = str
-
-const addToLeft = (str, ch, n) => ch.repeat(n - str.length) + str
-
-const delay = ms => new Promise(
-  (resolve, reject) => setTimeout(resolve, ms)
-)
-
-const click = (str, ms) => new Promise(
-  (resolve, reject) => {
-    console.log('speeed:', ms)
-    $(str).classList.toggle('off');
-    new Audio(audioUrls[seed.indexOf(str)]).play()
-    delay(ms).then(() => {
-      $(str).classList.toggle('off');
-      return delay(50)
-    }).then(() => resolve())
+function *range(to) {
+  for (let i = -to; i <= to; i++) {
+    yield i;
   }
-)
-
-const playSequence = (arr, ms, cb) => {
-  !arr.length
-    ? cb()
-    : click(arr[0], ms).then(() => playSequence(arr.slice(1), ms, cb))
 }
 
-const say = arr => new Promise(
-  (resolve, reject) => {
-    const recur = arr => {
-      if (!arr.length) {
-        $('#level').classList.remove('text-right')
-        resolve();
-      } else {
-        delay(100).then(() => {
-          setMsg(arr[0])
-          recur(arr.slice(1))})
+function *domain(deep) {
+  for (let y of range(deep)) {
+    for (let x of range(Math.pow(2, deep - 1))) {
+      if ( !(x === 0 && y === 0) ) {
+        yield { x, y };
       }
     }
-    $('#level').classList.add('text-right')
-    setMsg('')
-    recur(arr)
   }
-)
-
-const win = _ => {
-  say(getTypeArr(msgWin, 6)).then(reset)
 }
 
-const gameOver = _ => {
-  say(getTypeArr(msgLose, 6)).then(reset)
+const toXY = n => size => ({
+  x: n % size,
+  y: Math.floor(n/size)
+});
+
+const toX = ({ x, y }) => (w, h) => {
+  let n = x + y * w;
+  if ((x >= 0 && x < w) && (y >= 0 && y < h) && (n < w * h)) {
+    return n;
+  }
 }
 
-const listen = seq => new Promise(
-  (resolve, reject) => {
 
-    const stop = _ => seed.forEach(e =>
-      $(e).removeEventListener('click', whenClick))
+// });
+let b = "<div class='container'>";
+for (let i = 0; i < 49; i++) {
+    if ( i % 7 === 0) {
+      b += "</div><div class='row'>"
+    }
+    b += `<div class='box' id='${i}'>` +
+      `<span>${test[i]}</span>`+
+    "</div>"
+}
+b += "</div>"
+document.body.innerHTML = b;
 
-    const whenClick = (e, elm = "#" + e.target.id) => {
-      // $(elm).removeEventListener('click', whenClick);
-      setMsg(addToLeft(String(seq.length - 1), '0', 2))
-      click(elm, 100).then();
-        // $(elm).addEventListener('click', whenClick)
-        if (seq[0] !== elm) {
-          setMsg(getRandomElm(sayNo))
-          stop()
-          delay(1000).then(reject)
-        } else {
-          seq.shift();
-          // setMsg(addToLeft(String(seq.length), '0', 2))
-        }
-        if (seq.length === 0) {
-          setMsg(getRandomElm(sayYes))
-          delay(1000).then(() => {
-            stop()
-            resolve()
-          })
-        }
-      }
-
-
-    seed.forEach(e => $(e).addEventListener('click', whenClick))
+document.addEventListener('click', (e) => {
+  let acc =0;
+  for(let i of domain(1)) {
+    let elm = toX(add(i, toXY(Number(e.target.id))(7)))(7,7);
+    if (typeof elm !== 'undefined') {
+    document.getElementById(''+ elm)
+    .classList.toggle('selected');
+    acc += test[elm];
+  }
+  e.target.innerHTML = `<span>${acc}</span>`
+}
 })
 
-const go = (getSeq, seq = getSeq()) => {
-  setMsg(addToLeft(String(seq.length), '0', 2));
-  (seq.length === WIN)
-    ? win()
-    : playSequence(seq, TIME - TIME/WIN*seq.length, () =>
-        listen(seq.slice())
-        .then(() => go(getSeq))
-        .catch(gameOver))
-}
-
-const startEngine = _ => {
-  $('#start').removeEventListener('click', startEngine)
-  seed.forEach((e) => $(e).classList.remove('off'))
- say(getTypeArr(msgHello, 6)).then(() => {
-   $('#start').addEventListener('click', reset)
-   reset()
- })
-//   reset()
-}
-
-const reset = _ => {
-  seed.forEach(e => $(e).classList.add('off'));
-  delay(1000).then(() => {
-  go(generateSequence(seed, test))
-})
-}
-
-// playSequence(['#blue','#blue','#blue','#blue','#blue','#blue','#blue','#blue']
-// , 200, ()=>console.log('aa'))
-$('#start').addEventListener('click', startEngine)
-
-module.exports = {win, say, game}
+module.exports = {toXY, toX}
