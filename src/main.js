@@ -1,14 +1,14 @@
-// const test = [
-//   0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
-//   0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
-//   0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-//   ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-//     ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-//       ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-//         ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-//           ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-//             ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
-// ];
+const test = [
+  0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+  0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+  0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+  ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+    ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+      ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+        ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+          ,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+            ,0, 0, 0, 1, 0, 0, 0, 1
+];
 //
 //
 //
@@ -16,11 +16,7 @@
 // const distance = ({ x, y }) => Math.sqrt(x*x + y*y);
 // const manhattan = ({ x, y }) => Math.abs(x) + Math.abs(y);
 //
-// const add = (...args) =>
-//   args.reduce((acc, vector) => ({
-//     x: acc.x + vector.x,
-//     y: acc.y + vector.y
-//   }), { x: 0, y: 0 })
+
 //
 // const product = (n, v) => ({
 //   x: n * v.x,
@@ -42,54 +38,58 @@
 //     }
 //   }
 // }
+const addVector = (...args) =>
+  args.reduce((acc, vector) => ({
+    x: acc.x + vector.x,
+    y: acc.y + vector.y
+  }), { x: 0, y: 0 })
 
-// const toX = ({ x, y }) => {
-//   let n = x + y * w;
-//   if ((x >= 0 && x < w) && (y >= 0 && y < h) && (n < w * h)) {
-//     return n;
-//   }
+const field = (w, h) => ({
 
-// const xy = (x,y) => ({
-//   x: x,
-//   y: y
-// });
-
-// make coordinate(x,y)
-// toXY(10, 3) =>
-// const toXY = (i, w) => xy(i % w, Math.floor(i/w));
+})
 
 
+const calc = (w, h) => (mask, target, flag=true) => {
 
-const tor = (x, r) => x < 0 ? (x + r) % r : x % r;
+  const tor = (x, w) => x < 0 ? (x + w) % w : x % w;
 
-const wrap = ({ w, h }) => ({ x, y }) => ({
-  x: tor(x, w),
-  y: tor(y, h)
-});
+  const wrap = ({ x, y }) => ({
+    x: tor(x, w),
+    y: tor(y, h)
+  });
 
-const toX = ({ w, h }) => ({ x, y }) => {
-  let n = x + y * w;
+  const toX = ({ x, y }) => {
+    let n = x + y * w;
     if ((x >= 0 && x < w) && (y >= 0 && y < h) && (n < w * h)) {
       return n;
     }
-  }
+  };
 
-const toXY = ({ w, h }) => index => ({
-  x: index % w,
-  y: Math.floor(index/w)
-});
+  const toXY = index => ({
+    x: index % w,
+    y: Math.floor(index/w)
+  });
 
+  return mask.map(vector => {
+    let index = addVector(vector, toXY(target));
+    if (tor) {
+      index = wrap(index);
+    }
+    return toX(index);
+  });
+}
 
-// f = a(b(x));
-const compose = (...fns) => x =>
-  fns.reduce((result, fn) => fn(result), x);
+const b = [
+  { x: 0, y: 0 },
+  { x: 1, y: 0 },
+  { x: -1, y: 0 },
+  { x: 0, y: 1 },
+  { x: -1, y: 0 },
+  { x: 0, y: -1 }
+];
 
-const matrix = ({ arr, w }) => {
-  return Object.assign(
-    {},
-    translate({ w, h: arr.length }))
-};
-
+const c = calc(10, 10);
+// console.log(c(b, 1));
 
 // const toX = ({ x, y }) => ({ w, h }) => {
 //   let n = x + y * w;
@@ -98,7 +98,6 @@ const matrix = ({ arr, w }) => {
 //     }
 //   }
 
-const torA = (x, r) => x < 0 ? (x + r) % r : x % r;
 
 // coordinate (x,y) on toroidal array
 // const tor = ({ x, y }, { w, h }) => {
@@ -110,50 +109,29 @@ const torA = (x, r) => x < 0 ? (x + r) % r : x % r;
 // }
 
 // });
-// function render() {
-// let b = "<div class='container'>";
-// for (let i = 0; i < 400; i++) {
-//   let {x, y} = toXY(i, 20)
-//   // console.log(x, y);
-//     if ( i % 20 === 0) {
-//       b += "</div><div class='row'>"
-//     }
-//     b += `<div class='box' id='${i}'>` +
-//     `<span>${x}:${y}</span>`+
-//     "</div>"
-// }
-// b += "</div>"
-// document.body.innerHTML = b;
-// };
+function render() {
+let b = "<div class='container'>";
+for (let i = 0; i < test.length; i++) {
+    if ( i % 10 === 0) {
+      b += "</div><div class='row'>"
+    }
+    b += `<div class='box' id='${i}'>` +
+    `<span>${test[i]}</span>`+
+    "</div>"
+}
+b += "</div>"
+document.body.innerHTML = b;
+};
 //
 
 
-// render();
-// document.addEventListener('click', (e) => {
-//   render();
-//   let a = 0;
-//   let acc =0;
-//   for(let i of blinker) {
-//     let {x, y} = i;
-//     let id = +e.target.id;
-//     let elm = add(i, toXY(id, 20));
-//     // elm = (
-//     //     tor(elm, {w: 20, h: 400/20})
-//     //   );
-//     console.log(id, toXY(id, 20), elm);
-//       elm = toX(torA(elm.x, 400/20) + torA(elm.y, 20))
-//     // elm = toX(elm)({w: 20, h: 400/20})
-//     if (typeof elm !== 'undefined') {
-//       document.getElementById(''+elm).innerHTML =
-//       `<span>${manhattan(i)}</span>`;
-//     // document.getElementById(''+ elm)
-//     // .classList.toggle('selected');
-//     acc += test[elm];
-//     document.getElementById(''+ elm).style.backgroundColor =
-//     `rgba(200, 0, 100, ${1/manhattan(i)} )`;
-//     // document.getElementById(''+ elm).innerHTML = `<span>${i.x}:${i.y}</span>`;
-//   }
-// }
-// })
+render();
 
-module.exports = { compose}
+document.addEventListener('mouseover', e => {
+  render();
+  console.log(c(b, +e.target.id, false));
+  c(b, +e.target.id, false).forEach(e =>
+    document.getElementById(e).classList.add('selected'))
+});
+
+module.exports = { calc , a, b}
