@@ -73,14 +73,26 @@ function *range(from, to) {
   }
 }
 
-function *domain(deep) {
+function domain(deep) {
+  let arr = [];
   for (let y of range(-deep, deep)) {
     for (let x of range(-deep, deep)) {
       if ( !(x === 0 && y === 0) ) {
-        yield { x, y };
+        arr.push({x, y});
       }
     }
   }
+  return arr;
+}
+
+
+const makeField = (size) => {
+  let arr = [];
+  for (let vector of domain(size)) {
+
+    console.log(arr);
+  }
+  return arr;
 }
 
 const toXY = (i, w) => ({
@@ -107,11 +119,13 @@ const translateTor = ({ x, y}, { w, h }) => {
 function render() {
 let b = "<div class='container'>";
 for (let i = 0; i < 400; i++) {
+  let {x, y} = toXY(i, 20)
+  // console.log(x, y);
     if ( i % 20 === 0) {
       b += "</div><div class='row'>"
     }
     b += `<div class='box' id='${i}'>` +
-
+    `<span>${x}:${y}</span>`+
     "</div>"
 }
 b += "</div>"
@@ -121,31 +135,29 @@ document.body.innerHTML = b;
 
 
 render();
-document.addEventListener('mouseover', (e) => {
+document.addEventListener('click', (e) => {
   render();
   let a = 0;
   let acc =0;
-  for(let i of domain(15)) {
+  for(let i of domain(6)) {
+    let {x, y} = i;
     let elm = add(i, toXY(Number(e.target.id), 20));
     elm = (
-      toX(
-        translateTor(
-          elm, {w: 20, h: 400/20}
-        )
-      )
-      (
-        {w: 20, h: 400/20}
-      )
-    );
+        translateTor(elm, {w: 20, h: 400/20})
+      );
+
+    elm = toX(elm)({w: 20, h: 400/20})
     if (typeof elm !== 'undefined') {
-    document.getElementById(''+ elm)
-    .classList.toggle('selected');
+      document.getElementById(''+elm).innerHTML =
+      `<span>${manhattan(i)}</span>`;
+    // document.getElementById(''+ elm)
+    // .classList.toggle('selected');
     acc += test[elm];
     document.getElementById(''+ elm).style.backgroundColor =
-    `rgb(0, ${20 * Math.round(distance(i))}, ${250 / Math.round(distance(i)/5)} )`;
+    `rgba(200, 0, 100, ${1/manhattan(i)} )`;
     // document.getElementById(''+ elm).innerHTML = `<span>${i.x}:${i.y}</span>`;
   }
 }
 })
 
-module.exports = {toXY, toX, setCellState}
+module.exports = {toXY, toX, setCellState, domain}
