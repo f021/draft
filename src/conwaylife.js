@@ -4,38 +4,29 @@ import vector from './vector'
 
 // justice :: Int -> Int -> { Rules } -> Int
 const justice = (suspect, neighbors, { overfill, alone, born }) =>
-  suspect > 0
+  (suspect > 0)
     ? (neighbors === alone || neighbors == overfill) ? suspect++ : 0
     : neighbors === born ? 1 : 0
 
-
-// makeVectorMap
-
-// in : [  1  1  1
-//         1  0  1
-//         1  1  1 ], Field(3, 3), 4
-//
-// out : [ {x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}
-//         {x: -1, y:  0}, {x: 1, y:  0}
-//         {x: -1, y:  1}, {x: 0, y:  1}, {x: 1, y:  1} ]
-//
-
 // makeVectorMap :: [ Int ] -> { Field } -> Int -> [ Vector ]
-const makeVectorMap = (arr, { xy }, begin) =>
-  arr.reduce((acc, x) => x ? [...acc, sub(xy(i), xy(begin)) : acc ], [])
+const getVectorMap = (arr, { xy }, begin) =>
+  arr.reduce((acc, x) => x ? [...acc, sub(xy(x), xy(begin))] : acc , [])
     //  .filter(elm => typeof elm !== 'undefined')
 
-// getMap :: { Field } -> [ Vector ] -> Int -> Bollean -> [ Int ]
-const getArrayOfIndex = ({ xy, x, tor}) =>
- (mask, position, wrap=true) =>
-   mask.map(vector => {
-     let i = add(vector, xy(position));
-     if (wrap) {
-       i = tor(i);
-     }
-     return x(i);
-   }).filter(e => typeof e !== 'undefined');
+// getMap :: { Field } -> [ Vector ] -> Int -> [ Int ]
+const getIndexMap = ({ x, xy }) => (mask, position) =>
+   mask.reduce((acc, v) => v ? [...acc, x(add(v, xy(position))) : acc, [])
+      //  .filter(elm => typeof elm !== 'undefined');
 
+// sub :: Int -> Int -> Fiels -> Vector
+// foldfn :: [a] -> Function -> [a] -> [a]
+const foldfn = (arr, fn, ...args) =>
+  arr.reduce((acc, x) => {
+    let val = fn(x, ...args)
+    return val ? [...acc, val] : acc
+  }, [])
+
+const getIndexMap => foldFn(mask, )
 
      const lets = () => {
        const f = getMap(Field(75, 7500/75));
