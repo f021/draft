@@ -1,1 +1,1 @@
-# es6-webpack-babel-boilerplate
+# learning js
