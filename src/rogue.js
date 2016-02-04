@@ -1,24 +1,12 @@
 
+import { compose } from './maps.js'
+
 // convert index of array to xy - coordinate
 // array.length = field.length = w * h
 // array[i] to field[x][y]
 // x = i % w
 // y = Math.floor(i/w)
 // i = x + y * w
-
-import { add, sub } from './vector'
-
-// fold :: Function -> [a] -> [a] -> [a]
-const fold = fn => (arr, ...args) =>
-  arr.reduce((acc, x) => {
-    let val = fn(x, ...args)
-    return val ? [...acc, val] : acc
-  }, [])
-
-// compose :: [Function] -> a -> a
-const compose = (...fns) => x =>
-  fns.reduceRight((result, fn) =>
-    fn(result), x)
 
 const Field = ({ w, h, flag=true }) => {
 
@@ -44,24 +32,10 @@ const Field = ({ w, h, flag=true }) => {
     y: Math.floor(i / w)
   })
 
-  // indexSubIndex :: Function -> Functoin -> Function
-  const indexSubIndex = compose(sub, xy)
-
-  // 
-  const vecPlusIndex = (v, a) => add(v, xy(a))
-
-  const getVectorMap = (arr, s) => compose(fold, addVec)
-  const getIndexMap = (arr, s) => compose(fold, subVec)
-
-  const getVectorMap = (arr, s) =>
-    arr.reduce((acc, x) => x ? [...acc, sub(xy(x), xy(begin))] : acc , [])
-      //  .filter(elm => typeof elm !== 'undefined')
-
 
   return {
-    xy: flag ? xy : tor,
+    xy: flag ? xy : compose(tor, xy),
     x: flag ? plain : compose(plain, tor)
-
   }
 
 }
