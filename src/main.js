@@ -1,20 +1,51 @@
 
 // import { add, sub } from './vector.js'
-import Field from './rogue'
-import { compose } from './maps'
+// import Maps from './maps'
+import Life from './conwaylife'
+
+  const isEnd = (a, b) => a.every((a,i) => a ===b[i] )
+
+const n = [ 1, 1, 1,
+            1, 0, 1,
+            1, 1, 1 ]
+
+
+const play = [1, 1, 1, 0, 0,
+              0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0]
+
+
+const state = {
+  w: 5,
+  h: 5,
+  arr: play
+  // flag: false
+}
+
+const neighbors = {
+  w: 3,
+  h: 3,
+  arr: n,
+  startPoint: 4
+}
+
+const rules = {
+  born: 3,
+  alone: 2,
+  overfill: 3
+}
+
+const go = Life({state, neighbors, rules})
+// console.log(go)
+const b = go.scene()
+let a = b.next()
+console.log(a)
+a = b.next()
+console.log(a)
 
 
 
-const n = [1, 1, 1,
-           1, 0, 1,
-           1, 1, 1]
 
-const b = Field({w:3, h:3})
-console.dir(b)
-// console.log(b.x(b.xy(-1)))
-// console.log(b.x(b.xy(2)))
-console.log(b.x({x:3, y:3}))
-// console.log(b.xy(-1))
-// console.log(b.x(b.xy(10)))
-
-module.exports = {Field}
+module.exports = {}

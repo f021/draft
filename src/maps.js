@@ -1,28 +1,30 @@
 
-import { add, sub } from './vector'
+import { add, sub, compose} from './vector'
+import Field from './rogue'
 
-// fold :: Function -> [a] -> [a] -> [a]
-const fold = fn => (arr, ...args) =>
-  arr.reduce((acc, x) => {
-    let val = fn(x, ...args)
-    return val ? [...acc, val] : acc
-  }, [])
+const Maps = ({ w, h, flag=true }) => {
 
-// compose :: [Function] -> a -> a
-const compose = (...fns) => x =>
-  fns.reduceRight((acc, fn) => fn(acc),  x)
+  const { x, xy } = Field({ w, h, flag })
 
+  // getVectorMap :: { Field } -> [ Int ] -> Int -> [ { Vector } ]
+  const getVectorMap = (arr, start) =>
+    arr.reduce((acc, n, i) =>
+      n ? [...acc, sub(xy(i), xy(start))] : acc, [])
 
-  // indexSubIndex :: Function -> Functoin -> Function
-  // const subIndex = compose(sub, xy)
-  // const addIndex = compose(add, xy)
+  // getMap :: { Field } -> [ Vector ] -> Int -> [ Int ]
+  const getIndexMap = (arr, pos) =>
+     arr.reduce((acc, n) => {
+       n = x(add(n, xy(pos)))
+       return n !== undefined ? [...acc, n] : acc
+     }, [])
 
-  // const getVectorMap = compose(fold, addIndex)
-  // const getIndexMap = compose(fold, subIndex)
+  const getIndexMaps = arr =>
+    Array.from(new Array(w * h), (_, i) => getIndexMap(arr, i))
 
-  // const getVectorMap = (arr, s) =>
-  //   arr.reduce((acc, x) => x ? [...acc, sub(xy(x), xy(begin))] : acc , [])
-      //  .filter(elm => typeof elm !== 'undefined')
+  return {
+    getIndexMaps,
+    getVectorMap
+  }
+}
 
-
-export { compose }
+export default Maps

@@ -8,7 +8,11 @@ const add = vectorFn((a,b) => a + b)
 
 const sub = vectorFn((a,b) => a - b)
 
+// compose :: [Function] -> a -> a
+const compose = (...fns) => x =>
+  fns.reduceRight((acc, fn) => fn(acc),  x)
+
 const sum = arr =>
   arr.reduce((a,b) => a + b)
 
-export { add, sub }
+export { add, sub, compose, sum}
