@@ -1,7 +1,7 @@
 
 // import { add, sub } from './vector.js'
 // import Maps from './maps'
-import Life from './conwaylife'
+import Oracle from './oracle'
 
 
 const n = [ 1, 1, 1,
@@ -15,12 +15,18 @@ const play = [1, 1, 1, 0, 0,
               0, 0, 0, 0, 0,
               0, 0, 0, 0, 0]
 
+              const play2 = [0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 1,
+                            0, 0, 0, 0, 1,
+                            0, 0, 0, 0, 1]
+
 
 const state = {
   w: 5,
-  h: 5,
-  arr: play,
-  flag: false
+  h: 5
+  // arr: play,
+  // flag: false
 }
 
 const neighbors = {
@@ -36,15 +42,10 @@ const rules = {
   overflow: 3
 }
 
-const go = Life({state, neighbors, rules})
+const go = Oracle({state, neighbors, rules})
 
-// console.log(go.calc(1, 3))
-let b = go.time()
-console.log(b.next())
-console.log(b.next())
-console.log(b.next())
-console.log(b.next())
-
+console.log(go.fate(play))
+console.log(go.fate(play2))
 
 
 
