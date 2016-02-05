@@ -16,7 +16,9 @@ const compose = (...fns) => x =>
 const sum = arr =>
   arr.reduce((a,b) => a + b)
 
-const notEqual = (as, bs) =>
-  as.some((a,i) => a !== bs[i])
+const zip = (as, bs) =>
+  as.map((a, i) => [a, bs[i]])
 
-export { add, sub, compose, sum, notEqual }
+const not = a => !a
+
+export { add, sub, compose, sum, zip, not }

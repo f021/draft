@@ -1,5 +1,5 @@
 
-import { compose } from './vector.js'
+import { compose } from './util.js'
 
 // convert index of array to xy - coordinate
 // array.length = field.length = w * h

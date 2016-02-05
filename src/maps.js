@@ -1,8 +1,8 @@
 
-import { add, sub, compose} from './vector'
-import Field from './rogue'
+import { add, sub, compose} from './util'
+import Field from './field'
 
-const Maps = ({ w, h, flag=true }) => {
+const Maps = ({ w, h, flag = true }) => {
 
   const { x, xy } = Field({ w, h, flag })
 
