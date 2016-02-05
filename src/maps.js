@@ -15,7 +15,7 @@ const Maps = ({ w, h, flag=true }) => {
   const getIndexMap = (arr, pos) =>
      arr.reduce((acc, n) => {
        n = x(add(n, xy(pos)))
-       return n !== undefined ? [...acc, n] : acc
+       return n ? [...acc, n] : acc
      }, [])
 
   // getIndexMaps :: [ Vektor ] -> [ [ Int ] ]

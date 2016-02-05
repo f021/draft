@@ -19,8 +19,8 @@ const play = [1, 1, 1, 0, 0,
 const state = {
   w: 5,
   h: 5,
-  arr: play
-  // flag: false
+  arr: play,
+  flag: false
 }
 
 const neighbors = {
