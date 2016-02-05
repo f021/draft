@@ -3,7 +3,6 @@
 // import Maps from './maps'
 import Life from './conwaylife'
 
-  const isEnd = (a, b) => a.every((a,i) => a ===b[i] )
 
 const n = [ 1, 1, 1,
             1, 0, 1,
@@ -34,16 +33,17 @@ const neighbors = {
 const rules = {
   born: 3,
   alone: 2,
-  overfill: 3
+  overflow: 3
 }
 
 const go = Life({state, neighbors, rules})
-// console.log(go)
-const b = go.scene()
-let a = b.next()
-console.log(a)
-a = b.next()
-console.log(a)
+
+// console.log(go.calc(1, 3))
+let b = go.time()
+console.log(b.next())
+console.log(b.next())
+console.log(b.next())
+console.log(b.next())
 
 
 

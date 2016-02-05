@@ -11,13 +11,14 @@ const Maps = ({ w, h, flag=true }) => {
     arr.reduce((acc, n, i) =>
       n ? [...acc, sub(xy(i), xy(start))] : acc, [])
 
-  // getMap :: { Field } -> [ Vector ] -> Int -> [ Int ]
+  // getMap :: [ Vector ] -> Int -> [ Int ]
   const getIndexMap = (arr, pos) =>
      arr.reduce((acc, n) => {
        n = x(add(n, xy(pos)))
        return n !== undefined ? [...acc, n] : acc
      }, [])
 
+  // getIndexMaps :: [ Vektor ] -> [ [ Int ] ]
   const getIndexMaps = arr =>
     Array.from(new Array(w * h), (_, i) => getIndexMap(arr, i))
 

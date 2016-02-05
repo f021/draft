@@ -8,7 +8,7 @@ import { compose } from './vector.js'
 // y = Math.floor(i/w)
 // i = x + y * w
 
-const Field = ({ w, h, flag=true }) => {
+const Field = ({ w, h, flag = true }) => {
 
 // {x, y} for toroidal array
 // tor :: { Vector } -> { Vector }
@@ -21,13 +21,10 @@ const Field = ({ w, h, flag=true }) => {
   }
 
 // return index of array for { x, y }
-// of undefuned if index outrange of w, h
+// or undefined if index outrange of w, h
 // plain :: { Vector } -> Int
-  const plain = ({ x, y }, i = x + y * w) => {
-    if ((x >= 0 && x < w) && (y >= 0 && y < h) && (i < w * h)) {
-      return i
-    }
-  }
+  const plain = ({ x, y }, i = x + y * w) =>
+    ((x >= 0 && x < w) && (y >= 0 && y < h) && (i < w * h)) && i
 
 // return { x, y } for plain array
 // xy :: Int -> { Vector }
